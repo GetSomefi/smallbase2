@@ -1,0 +1,69 @@
+<html>
+<body>
+<h1>Node.js love</h1>
+<p>Writing a story?</p>
+<p>Type <a href="/home">/home</a> to url to get there</p>
+<div id="connecting">Connection</div>
+<div id="response">Response here</div>
+
+<label for="filename">[FILENAME].txt</label>
+<input placeholder="Give some file name" id="filename" type="text" name="filename" />
+
+<label for="filecontent">Lorem ipsum ...</label>
+<textarea id="filecontent" placeholder="Give some content"></textarea>
+
+<button id="submitter" type="button" onclick="loadDoc()">Create it!</button>
+
+<div>
+  <button id="filelister" type="button" onclick="getFiles()">Get files</button>
+</div>
+
+<script>
+var times = 0;
+function loadDoc() {
+  console.log("Wait");
+  times++;
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log("Done");
+      document.getElementById("connecting").innerHTML = this.responseText;
+      console.log(JSON.parse(this.responseText));
+    }
+  };
+  var data = {
+    whattodo:"createfile",
+    filename:document.getElementById("filename").value,
+    filecontent:document.getElementById("filecontent").value
+  };
+  var url = document.location.hostname+'/createfile?json=write&data=' + JSON.stringify(data);
+  document.getElementById("response").innerHTML = times + " " + url;
+  xhttp.open("GET", url, true);
+  xhttp.send();
+}
+function getFiles() {
+  console.log("Wait");
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log("Done");
+      //document.getElementById("connecting").innerHTML = this.responseText;
+      var json = JSON.parse(this.responseText);
+      console.log(json);
+
+      for (var i = 0; i < json.response.length; i++) {
+        document.getElementById("connecting").innerHTML += '<button type="button" onclick="openFile('+json.response[i]+')">'+json.response[i]+'</button>';
+      }
+    }
+  };
+  var data = {
+    whattodo:"listfiles"
+  };
+  var url = document.location.hostname+'/createfile?json=write&data=' + JSON.stringify(data);
+  document.getElementById("response").innerHTML = times + " " + url;
+  xhttp.open("GET", url, true);
+  xhttp.send();
+}
+</script>
+</body>
+</html>
