@@ -74,7 +74,8 @@ http.createServer(function (req, res) {
               };
               res.end(JSON.stringify(data));
             }else if(dataJSON.whattodo == "openfile"){
-              fs.readFile(dataJSON.filename, 'utf8', function (err,data) {
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              fs.readFile(dataJSON.filename, 'UTF-8', function (err,d) {
                 var ok = true;
                 if (err) {
                   ok = false;
@@ -82,10 +83,12 @@ http.createServer(function (req, res) {
 
                 var data = {
                   success:ok,
-                  response:data
+                  response:d
                 };
+                console.log("Response data Open file: ", data);
                 res.end(JSON.stringify(data));
               });
+
             }else{
               res.writeHead(200, { 'Content-Type': 'application/json' });
               var data = {

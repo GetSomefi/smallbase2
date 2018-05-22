@@ -52,7 +52,7 @@ function getFiles() {
       console.log(json);
 
       for (var i = 0; i < json.response.length; i++) {
-        document.getElementById("connecting").innerHTML += '<button type="button" onclick="openFile('+json.response[i]+')">'+json.response[i]+'</button>';
+        document.getElementById("connecting").innerHTML += '<button data-file="'+json.response[i]+'" type="button" onclick="openFile(event)">'+json.response[i]+'</button>';
       }
     }
   };
@@ -60,7 +60,27 @@ function getFiles() {
     whattodo:"listfiles"
   };
   var url = document.location.hostname+'/createfile?json=write&data=' + JSON.stringify(data);
-  document.getElementById("response").innerHTML = times + " " + url;
+  //document.getElementById("response").innerHTML = times + " " + url;
+  xhttp.open("GET", url, true);
+  xhttp.send();
+}
+function openFile(file){
+  console.log("Wait");
+  console.log();
+  file = file.target.dataset.file; //sets data-file attribute to file variable
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log("Done");
+      //document.getElementById("connecting").innerHTML = this.responseText;
+      console.log("File opened", JSON.parse(this.responseText));
+    }
+  };
+  var data = {
+    whattodo:"openfile",
+    filename:file
+  };
+  var url = document.location.hostname+'/createfile?json=write&data=' + JSON.stringify(data);
   xhttp.open("GET", url, true);
   xhttp.send();
 }
