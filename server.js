@@ -75,11 +75,10 @@ http.createServer(function (req, res) {
               res.end(JSON.stringify(data));
             }else if(dataJSON.whattodo == "openfile"){
               fs.readFile(dataJSON.filename, 'utf8', function (err,data) {
-                var ok = false;
+                var ok = true;
                 if (err) {
                   ok = false;
                 }
-                ok = true;
 
                 var data = {
                   success:ok,
