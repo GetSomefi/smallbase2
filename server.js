@@ -49,8 +49,15 @@ http.createServer(function (req, res) {
             var dataJSON = JSON.parse(q.data);
             console.log("There is data: ", dataJSON );
             console.log("createfile", dataJSON.whattodo);
-            if(dataJSON.whattodo == "createfile"){
+            if(dataJSON.whattodo == "create"){
               fs.appendFile( dataJSON.filename + '.txt', dataJSON.filecontent, function (err) {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                if (err) throw err;
+                var data = {success:true};
+                res.end(JSON.stringify(data));
+              });
+            }else if(dataJSON.whattodo == "update"){
+              fs.writeFile( dataJSON.filename + '.txt', dataJSON.filecontent, function (err) {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 if (err) throw err;
                 var data = {success:true};
@@ -64,7 +71,8 @@ http.createServer(function (req, res) {
               fs.readdirSync(folder).forEach(file => {
                 console.log(file, file.includes("."));
 
-                if( file.includes(".txt") || file.includes(".json") ){
+                //if( file.includes(".txt") || file.includes(".json") ){
+                if( file.includes(".txt") ){
                   fileList.push(file);
                 }
               })
@@ -83,7 +91,8 @@ http.createServer(function (req, res) {
 
                 var data = {
                   success:ok,
-                  response:d
+                  response:d,
+                  file:dataJSON.filename
                 };
                 console.log("Response data Open file: ", data);
                 res.end(JSON.stringify(data));
