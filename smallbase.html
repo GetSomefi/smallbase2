@@ -1,0 +1,79 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+
+  </style>
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<body onload="getListOfSMBS()">
+
+<main>
+  <h1>Node.js love</h1>
+  <div class="smallbase-main">
+
+    <div class="list-of-smbs-holder">
+      <p>Please select Smallbase</p>
+      <div id="list-of-smbs">
+        Loading ...
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function getListOfSMBS(){
+    console.log("Wait");
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("Done");
+        var r = JSON.parse(this.responseText);
+        console.log(r);
+        document.getElementById("list-of-smbs").innerHTML = "";
+        for (var i = 0; i < r.filelist.length; i++) {
+          document.getElementById("list-of-smbs").innerHTML += '<button data-file="'+r.filelist[i]+'" type="button" onclick="openFile(event)">'+r.filelist[i]+'</button>';
+        }
+      }
+    };
+    var data = {
+      whattodo:"getListOfSMBS",
+      user:"admin"
+    };
+    var url = document.location.hostname+'/createfile?json=write&data=' + JSON.stringify(data);
+    xhttp.open("GET", url, true);
+    xhttp.send();
+  }
+
+  /*make out file*/
+  function openFile(file){
+    console.log("Wait file");
+    console.log();
+    file = file.target.dataset.file; //sets data-file attribute to file variable
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("Done");
+        //document.getElementById("connecting").innerHTML = this.responseText;
+        var r = JSON.parse(this.responseText);
+        var filename = r.file.split('.')[0];
+        document.getElementById("filename").value = filename;
+        document.getElementById("filecontent").value = r.response;
+        document.getElementById("submitter").innerHTML = "Publish updates";
+        document.getElementById("submitter").setAttribute('onclick', 'loadDoc("update")');
+        //console.log("File opened", JSON.parse(this.responseText));
+      }
+    };
+    var data = {
+      whattodo:"openfile",
+      filename:file
+    };
+    var url = document.location.hostname+'/createfile?json=write&data=' + JSON.stringify(data);
+    xhttp.open("GET", url, true);
+    xhttp.send();
+  }
+</script>
+
+</body>
+</html>

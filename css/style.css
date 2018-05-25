@@ -1,0 +1,12 @@
+.row-holder{
+  margin-bottom: 15px;
+}
+#file-list-parent button,
+#list-of-smbs button {
+    margin-right: 15px;
+    margin-top: 15px;
+    background: #848484;
+    color: #FFF;
+    border: none;
+    padding: 10px 30px;
+}
