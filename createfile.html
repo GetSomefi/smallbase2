@@ -2,23 +2,14 @@
 <head>
   <meta charset="utf-8">
   <style>
-    .row-holder{
-      margin-bottom: 15px;
-    }
-    #file-list-parent button {
-        margin-right: 15px;
-        margin-top: 15px;
-        background: #848484;
-        color: #FFF;
-        border: none;
-        padding: 10px 30px;
-    }
+
   </style>
+  <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
 <h1>Node.js love</h1>
 <p>Writing a story?</p>
-<p>Type <a href="/home">/home</a> to url to get there</p>
+<p>Type <a href="/sb2">/sb2</a> to start Smallbase2</p>
 
 <div>
   <button id="filelister" type="button" onclick="getFiles()">Get all .txt files</button>
@@ -90,6 +81,8 @@ function getFiles() {
   xhttp.open("GET", url, true);
   xhttp.send();
 }
+
+/*make out file*/
 function openFile(file){
   console.log("Wait file");
   console.log();

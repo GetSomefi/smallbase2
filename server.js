@@ -22,10 +22,22 @@ http.createServer(function (req, res) {
       res.write("<br />Use parameter ?data=[command]");
     }
     */
-
-
-
-    if(req.url == "/home"){
+    if(req.url.indexOf('.css') != -1){ //req.url has the pathname, check if it conatins '.css'
+      fs.readFile('css/style.css', function (err, data) {
+        console.log("css request");
+        if (err) console.log(err);
+        res.writeHead(200, {'Content-Type': 'text/css'});
+        res.write(data);
+        res.end();
+      });
+    }else if(req.url.indexOf('.js') != -1){ //req.url has the pathname, check if it conatins '.css'
+          fs.readFile(__dirname + 'js/script.js', function (err, data) {
+            if (err) console.log(err);
+            res.writeHead(200, {'Content-Type': 'text/javascript'});
+            res.write(data);
+            res.end();
+          });
+    }else if(req.url == "/home"){
       fs.readFile('home.html', function(err, data) {
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.write(data);
@@ -37,7 +49,17 @@ http.createServer(function (req, res) {
         res.write(data);
         res.end();
       });
+    }else if(req.url == "/sb2"){
+      fs.readFile('smallbase.html', function(err, data) {
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.write(data);
+        res.end();
+      });
     }else{
+      /////////////////////
+      //ALL AJAX REQUESTS//
+      /////////////////////
+
       var q = urlMod.parse(req.url, true).query;
       //console.log(req.url);
       //console.log(q.json);
@@ -69,7 +91,7 @@ http.createServer(function (req, res) {
               var fileList = [];
 
               fs.readdirSync(folder).forEach(file => {
-                console.log(file, file.includes("."));
+                //console.log(file, file.includes("."));
 
                 //if( file.includes(".txt") || file.includes(".json") ){
                 if( file.includes(".txt") ){
@@ -79,6 +101,21 @@ http.createServer(function (req, res) {
               var data = {
                 success:true,
                 response:fileList
+              };
+              res.end(JSON.stringify(data));
+            }else if(dataJSON.whattodo == "getListOfSMBS"){
+              const folder = "./" + dataJSON.user + "_smb";
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              var fileList = [];
+              fs.readdirSync(folder).forEach(file => {
+                if( file.includes(".json") ){
+                  fileList.push(file);
+                }
+              });
+              var data = {
+                success:true,
+                filelist:fileList,
+                folder:folder
               };
               res.end(JSON.stringify(data));
             }else if(dataJSON.whattodo == "openfile"){
@@ -132,19 +169,3 @@ http.createServer(function (req, res) {
 
     //res.end();
 }).listen(8080);
-
-console.log('Node.js web server at port 8080 is running..')
-/*
-http.createServer(function (req, res) {
-  if(req.url == "/createfile"){
-
-    //fs.appendFile('mynewfile1.txt', 'Hello content!', function (err) {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      //if (err) throw err;
-      var data = "Success";
-      res.write( JSON.stringify(data) );
-      res.end();
-    //});
-  }
-}).listen(3000);
-*/
