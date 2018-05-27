@@ -105,6 +105,7 @@ http.createServer(function (req, res) {
               res.end(JSON.stringify(data));
             }else if(dataJSON.whattodo == "getListOfSMBS"){
               const folder = "./" + dataJSON.user + "_smb";
+              console.log(folder);
               res.writeHead(200, { 'Content-Type': 'application/json' });
               var fileList = [];
               fs.readdirSync(folder).forEach(file => {
@@ -112,12 +113,34 @@ http.createServer(function (req, res) {
                   fileList.push(file);
                 }
               });
-              var data = {
+              var data_ = {
                 success:true,
                 filelist:fileList,
-                folder:folder
+                user:dataJSON.user
               };
-              res.end(JSON.stringify(data));
+              res.end(JSON.stringify(data_));
+            }else if(dataJSON.whattodo == "opensmbs"){
+              const folder = "./" + dataJSON.user + "_smb";
+              var fileandpath = folder + "/" +  dataJSON.filename + ".json";
+              console.log("Polku: ",fileandpath);
+
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              fs.readFile(fileandpath, 'UTF-8', function (err,d) {
+                var ok = true;
+                if (err) {
+                  ok = false;
+                }
+
+                var data = {
+                  success:ok,
+                  content:d,
+                  file:dataJSON.filename
+                };
+                console.log("Response data Open file: ", data);
+                res.end(JSON.stringify(data));
+              });
+
+
             }else if(dataJSON.whattodo == "openfile"){
               res.writeHead(200, { 'Content-Type': 'application/json' });
               fs.readFile(dataJSON.filename, 'UTF-8', function (err,d) {
