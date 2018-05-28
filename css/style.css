@@ -11,9 +11,38 @@
     padding: 10px 30px;
 }
 
+/*json view*/
+.key, .not-key {
+    display: inline-block;
+}
 pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
 .string { color: green; }
 .number { color: darkorange; }
 .boolean { color: blue; }
 .null { color: magenta; }
 .key { color: red; }
+
+.depth-val-0{margin-left: 0}
+.depth-val-1{margin-left: 5px}
+.depth-val-2{margin-left: 10px}
+.depth-val-3{margin-left: 15px}
+.depth-val-4{margin-left: 20px}
+.depth-val-5{margin-left: 25px}
+.depth-val-6{margin-left: 30px}
+.depth-val-7{margin-left: 35px}
+.depth-val-8{margin-left: 40px}
+
+.parent-span, .child-span {
+    padding: 2px 6px;
+    font-size: 0.8em;
+    font-family: "Helvetica";
+    display: inline-block;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+.parent-span{
+    background: #ae5cff;
+}
+.child-span {
+    background: #ff6ce3;
+}

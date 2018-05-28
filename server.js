@@ -125,17 +125,22 @@ http.createServer(function (req, res) {
               console.log("Polku: ",fileandpath);
 
               res.writeHead(200, { 'Content-Type': 'application/json' });
-              fs.readFile(fileandpath, 'UTF-8', function (err,d) {
+              //fs.readFile(fileandpath, 'UTF-8', function (err,d) {
+              fs.readFile(fileandpath, 'utf8', function (err, d) {
                 var ok = true;
                 if (err) {
                   ok = false;
                 }
+
+                console.log(d);
+                d = JSON.parse(d);
 
                 var data = {
                   success:ok,
                   content:d,
                   file:dataJSON.filename
                 };
+
                 console.log("Response data Open file: ", data);
                 res.end(JSON.stringify(data));
               });

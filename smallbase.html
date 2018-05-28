@@ -46,6 +46,24 @@
     xhttp.send();
   }
 
+  var temp = "";
+  function jsonPrinter(o,depth){
+    for(var index in o) {
+      var attr = o[index];
+
+      if( typeof attr === 'object' ){
+        depth++;
+        temp += "<div class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+index+"</span></div>";
+        jsonPrinter(attr,depth);
+
+      }else{
+        temp += "<div class='depth-val-"+depth+" row-inner'><span class='parent-span'>"+index+"</span><span class='child-span'>"+attr+"</span></div>";
+        //divified += "<div class='depth-val-"+depth+"'><span>"+index+"</span>:<span>"+attr+"</span></div>";
+        //console.log(index,attr);
+      }
+    }
+    return temp;
+  }
   /*make out file*/
   function openFileSmb(btn){
     console.log("Wait file");
@@ -59,8 +77,10 @@
       if (this.readyState == 4 && this.status == 200) {
         console.log("Done");
         var r = JSON.parse(this.responseText);
-        console.log(r.content);
-        document.getElementById("list-of-smbs").innerHTML += "<div class='smb-opened'>" + syntaxHighlight(r.content) + "</div>";
+
+        var sb = jsonPrinter(r.content,0);
+
+        document.getElementById("list-of-smbs").innerHTML += "<div class='smb-opened'>" + sb + "</div>";
       }
     };
     var data = {
@@ -82,19 +102,19 @@
       }
       json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-          var cls = 'number';
+          var cls = 'number not-key';
           if (/^"/.test(match)) {
               if (/:$/.test(match)) {
                   cls = 'key';
               } else {
-                  cls = 'string';
+                  cls = 'string not-key';
               }
           } else if (/true|false/.test(match)) {
-              cls = 'boolean';
+              cls = 'boolean not-key';
           } else if (/null/.test(match)) {
-              cls = 'null';
+              cls = 'null not-key';
           }
-          return '<div class="' + cls + '">' + match + '</div>';
+          return '<span class="' + cls + '">' + match + '</span>';
       });
   }
 </script>
