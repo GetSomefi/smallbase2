@@ -55,6 +55,7 @@
       savedData = JSON.parse(savedData);
 
       getListOfSMBS(savedData.lastOpenedSB);
+      openFileSmb(savedData.lastOpenedSB);
     }else{
       getListOfSMBS();
     }
@@ -70,7 +71,12 @@
         console.log(r);
         document.getElementById("list-of-smbs").innerHTML = "";
         for (var i = 0; i < r.filelist.length; i++) {
-          document.getElementById("list-of-smbs").innerHTML += '<button data-user="'+r.user+'" data-file="'+r.filelist[i]+'" type="button" onclick="openFileSmb(event)">'+r.filelist[i]+'</button>';
+          var additionalClass = "";
+          var fileName = r.filelist[i].split('.')[0];
+          if( fileName == openedDefault ){
+            additionalClass = " active";
+          }
+          document.getElementById("list-of-smbs").innerHTML += '<button class="button-sb'+additionalClass+'" data-user="'+r.user+'" data-file="'+r.filelist[i]+'" type="button" onclick="openFileSmb(event)">'+r.filelist[i]+'</button>';
         }
       }
     };
@@ -94,7 +100,12 @@
         jsonPrinter(attr,depth);
 
       }else{
-        temp += "<div class='depth-val-"+depth+" row-inner'><span class='parent-span'>"+index+"</span><span class='child-span'>"+attr+"</span></div>";
+        var additionalClass = "";
+        if( Number.isInteger(attr) ){
+          additionalClass = " index-is-number";
+        }
+
+        temp += "<div class='depth-val-"+depth+" row-inner'><span class='parent-span'>"+index+"</span><span class='child-span"+additionalClass+"'>"+attr+"</span></div>";
         //divified += "<div class='depth-val-"+depth+"'><span>"+index+"</span>:<span>"+attr+"</span></div>";
         //console.log(index,attr);
       }
@@ -108,12 +119,24 @@
       document.getElementById("content-of-SB").remove();
     }
 
+    const classList = document.getElementsByClassName("button-sb");
+    for (var i = 0; i < classList.length; i++) {
+      classList[i].classList.remove("active");
+    }
+
     console.log("Wait file");
     console.log("Opening");
-    var file = btn.target.dataset.file;
-    file = file.split(".")[0];
-    var user = btn.target.dataset.user;
+    if(btn.target){
+      btn.target.classList.add("active");
+      var file = btn.target.dataset.file;
+      file = file.split(".")[0];
+      var user = btn.target.dataset.user;
+    }else{
+      file = btn;
+      user = "admin";
+    }
     console.log(file);
+
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {

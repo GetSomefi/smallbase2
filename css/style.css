@@ -2,13 +2,21 @@
   margin-bottom: 15px;
 }
 #file-list-parent button,
-#list-of-smbs button {
+#list-of-smbs button,
+.button-sb {
     margin-right: 15px;
     margin-top: 15px;
     background: #848484;
     color: #FFF;
     border: none;
     padding: 10px 30px;
+    transition:all .5s linear;
+}
+.button-sb.active {
+    background: #ff4848 !important;
+    font-weight: bold;
+    border-left: 5px solid #848484 !important;
+    transition:all .5s linear;
 }
 
 /*json view*/
@@ -17,7 +25,10 @@
 }
 pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
 .string { color: green; }
-.number { color: darkorange; }
+.index-is-number {
+  background-color: #ff7e00 !important;
+  color: #FFF;
+}
 .boolean { color: blue; }
 .null { color: magenta; }
 .key { color: red; }
