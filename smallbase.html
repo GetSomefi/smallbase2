@@ -98,7 +98,8 @@
       if(parentKey && last != parentKey){
         depth++;
         last = parentKey;
-        temp += "<div class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+parentKey+"</span></div>";
+        var firstLevel = lastObject.obj + "." + last;
+        temp += "<div data-objpath="+firstLevel+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+parentKey+"</span></div>";
       }
 
       if(parentKey){
@@ -117,8 +118,8 @@
 
       if( typeof attr === 'object' ){
         depth++;
-        temp += "<div class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+index+"</span></div>";
         lastObject.obj = lastObject.objTemp;
+        temp += "<div data-objpath="+lastObject.obj+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+index+"</span></div>";
         for(var key in attr){
           jsonPrinter(attr[key],depth,key,last,lastObject);
         }
@@ -133,7 +134,7 @@
         }
 
         var d = depth + 1;
-        temp += "<div class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span class='child-span"+additionalClass+"'>"+attr+"</span></div>";
+        temp += "<div data-objpath="+lastObject.objTemp+" class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span class='child-span"+additionalClass+"'>"+attr+"</span></div>";
         //divified += "<div class='depth-val-"+depth+"'><span>"+index+"</span>:<span>"+attr+"</span></div>";
         //console.log(index,attr);
       }
