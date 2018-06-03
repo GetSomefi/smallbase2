@@ -91,7 +91,7 @@
 
   var temp = "";
   var p = [];
-  function jsonPrinter(o,depth,parentKey,last){
+  function jsonPrinter(o,depth,parentKey,last,lastObject){
     for(var index in o) {
       var attr = o[index];
 
@@ -101,17 +101,30 @@
         temp += "<div class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+parentKey+"</span></div>";
       }
 
+      if(parentKey){
+        lastObject.objTemp = parentKey + "." + index;
+      }else{
+        lastObject.objTemp = index;
+      }
+
+      if( lastObject.obj == "" ){
+        lastObject.objTemp = lastObject.objTemp;
+      }else{
+        lastObject.objTemp = lastObject.obj + "." + lastObject.objTemp;
+      }
+
+
+
       if( typeof attr === 'object' ){
         depth++;
         temp += "<div class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+index+"</span></div>";
+        lastObject.obj = lastObject.objTemp;
         for(var key in attr){
-          if( (Object.keys(attr).indexOf(key)) < Object.keys(attr).length ){
-            jsonPrinter(attr[key],depth,key,last);
-          }else{
-            jsonPrinter(attr[key],depth,false,last);
-          }
+          jsonPrinter(attr[key],depth,key,last,lastObject);
         }
       }else{
+        //lastObject.obj = lastObject.objTemp;
+        //lastObject.objTemp = parentKey + "." + index;
         var additionalClass = "";
         if( Number.isInteger(attr) ){
           additionalClass = " index-is-number";
@@ -124,6 +137,7 @@
         //divified += "<div class='depth-val-"+depth+"'><span>"+index+"</span>:<span>"+attr+"</span></div>";
         //console.log(index,attr);
       }
+      console.log("lastObject ", lastObject);
     }
     return temp;
   }
@@ -159,7 +173,11 @@
         console.log("Done");
         var r = JSON.parse(this.responseText);
 
-        var sb = jsonPrinter(r.content,0,false,"");
+        var lastObject = {
+          objTemp:"",
+          obj:""
+        }
+        var sb = jsonPrinter(r.content,0,false,"",lastObject);
 
         document.getElementById("list-of-smbs").innerHTML += "<div id='content-of-SB' class='smb-opened'>" + sb + "</div>";
       }
