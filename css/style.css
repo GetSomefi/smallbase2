@@ -23,15 +23,14 @@
 .key, .not-key {
     display: inline-block;
 }
-pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
-.string { color: green; }
 .index-is-number {
   background-color: #ff7e00 !important;
   color: #FFF;
 }
-.boolean { color: blue; }
-.null { color: magenta; }
-.key { color: red; }
+.index-is-boolean {
+  background-color: #225bff !important;
+  color: #FFF;
+}
 
 .depth-val-0{margin-left: 0}
 .depth-val-1{margin-left: 5px}

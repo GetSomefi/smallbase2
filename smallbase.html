@@ -31,9 +31,9 @@
     if( against == "lastOpenedSB" ){
       if (savedData != null){
         if(savedData.lastOpenedSB == data){
-          console.log(against + " already saved");
+          //console.log(against + " already saved");
         }else{
-          console.log(against + " was updated to last opened");
+          //console.log(against + " was updated to last opened");
           savedData.lastOpenedSB = data;
           localStorage.setItem("savedData", JSON.stringify(savedData));
         }
@@ -41,17 +41,17 @@
         savedData = {};
         savedData.lastOpenedSB = data;
         localStorage.setItem("savedData", JSON.stringify(savedData));
-        console.log(data + " saved");
+        //console.log(data + " saved");
       }
     }
-    console.log("localStorage now: ", JSON.parse(localStorage.getItem("savedData")));
+    //console.log("localStorage now: ", JSON.parse(localStorage.getItem("savedData")));
   }
 
   function localStorageData(){
     savedData = localStorage.getItem("savedData");
-    console.log("saved data: " + savedData);
+    //console.log("saved data: " + savedData);
     if (savedData != null){
-      console.log("data exists");
+      //console.log("data exists");
       savedData = JSON.parse(savedData);
 
       getListOfSMBS(savedData.lastOpenedSB);
@@ -90,22 +90,37 @@
   }
 
   var temp = "";
-  function jsonPrinter(o,depth){
+  var p = [];
+  function jsonPrinter(o,depth,parentKey,last){
     for(var index in o) {
       var attr = o[index];
+
+      if(parentKey && last != parentKey){
+        depth++;
+        last = parentKey;
+        temp += "<div class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+parentKey+"</span></div>";
+      }
 
       if( typeof attr === 'object' ){
         depth++;
         temp += "<div class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+index+"</span></div>";
-        jsonPrinter(attr,depth);
-
+        for(var key in attr){
+          if( (Object.keys(attr).indexOf(key)) < Object.keys(attr).length ){
+            jsonPrinter(attr[key],depth,key,last);
+          }else{
+            jsonPrinter(attr[key],depth,false,last);
+          }
+        }
       }else{
         var additionalClass = "";
         if( Number.isInteger(attr) ){
           additionalClass = " index-is-number";
+        }else if( typeof attr === 'boolean' ){
+          additionalClass = " index-is-boolean";
         }
 
-        temp += "<div class='depth-val-"+depth+" row-inner'><span class='parent-span'>"+index+"</span><span class='child-span"+additionalClass+"'>"+attr+"</span></div>";
+        var d = depth + 1;
+        temp += "<div class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span class='child-span"+additionalClass+"'>"+attr+"</span></div>";
         //divified += "<div class='depth-val-"+depth+"'><span>"+index+"</span>:<span>"+attr+"</span></div>";
         //console.log(index,attr);
       }
@@ -124,8 +139,8 @@
       classList[i].classList.remove("active");
     }
 
-    console.log("Wait file");
-    console.log("Opening");
+    console.log("Wait");
+    //console.log("Opening");
     if(btn.target){
       btn.target.classList.add("active");
       var file = btn.target.dataset.file;
@@ -144,7 +159,7 @@
         console.log("Done");
         var r = JSON.parse(this.responseText);
 
-        var sb = jsonPrinter(r.content,0);
+        var sb = jsonPrinter(r.content,0,false,"");
 
         document.getElementById("list-of-smbs").innerHTML += "<div id='content-of-SB' class='smb-opened'>" + sb + "</div>";
       }
@@ -162,27 +177,6 @@
 
   }
 
-  function syntaxHighlight(json) {
-      if (typeof json != 'string') {
-           json = JSON.stringify(json, undefined, 2);
-      }
-      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-          var cls = 'number not-key';
-          if (/^"/.test(match)) {
-              if (/:$/.test(match)) {
-                  cls = 'key';
-              } else {
-                  cls = 'string not-key';
-              }
-          } else if (/true|false/.test(match)) {
-              cls = 'boolean not-key';
-          } else if (/null/.test(match)) {
-              cls = 'null not-key';
-          }
-          return '<span class="' + cls + '">' + match + '</span>';
-      });
-  }
 </script>
 
 </body>

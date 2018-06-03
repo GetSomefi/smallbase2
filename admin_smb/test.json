@@ -1,4 +1,8 @@
 {
     "Name": "Just a test JSON",
-    "Text": "Nothing serious here!"
+    "Text": "Nothing serious here!",
+    "Example":false,
+    "Example2":true,
+    "Number":123456789,
+    "Scandal":"Tässä jotain suomeksi. Öö, miksi?"
 }
