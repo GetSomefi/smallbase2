@@ -56,3 +56,19 @@
 .child-span {
     background: #ff6ce3;
 }
+
+#save-button {
+    background: #46ff48 !important;
+    display: inline-block;
+    font-size: 1em;
+    text-transform: uppercase;
+    font-family: "Helvetica";
+    font-weight: bold;
+}
+.sb-modifier-active {
+    background: #FFF;
+    border: 1px solid #d7d7d7;
+}
+.sb-modifier-saving{
+  border: 1px solid red;
+}

@@ -134,14 +134,44 @@
         }
 
         var d = depth + 1;
-        temp += "<div data-objpath="+lastObject.objTemp+" class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span class='child-span"+additionalClass+"'>"+attr+"</span></div>";
-        //divified += "<div class='depth-val-"+depth+"'><span>"+index+"</span>:<span>"+attr+"</span></div>";
-        //console.log(index,attr);
+        temp += "<div data-objpath="+lastObject.objTemp+" class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span onclick='sbDataModify(event)' class='child-span"+additionalClass+"'>"+attr+"</span></div>";
       }
-      console.log("lastObject ", lastObject);
+      //console.log("lastObject ", lastObject);
     }
     return temp;
   }
+
+  function sbDataModify(e){
+      var el = e.target;
+      var elParent = el.parentElement;
+      console.log(el);
+
+      el.contentEditable = 'true';
+      el.classList.add("sb-modifier-active");
+
+
+      if( document.getElementById('save-button') ){
+        document.getElementById('save-button').remove();
+      }else{
+        var saveBtn = document.createElement("button");
+        saveBtn.onclick = function(event){
+          sbDataSave(event,el);
+        }
+        saveBtn.id = 'save-button';
+        saveBtn.innerHTML = "Save";
+        elParent.appendChild(saveBtn);
+      }
+
+      el.focus();
+  }
+
+  function sbDataSave(e,el){
+    console.log("das",el);
+    el.classList.remove("sb-modifier-active");
+    el.classList.add("sb-modifier-saving");
+    console.log("Tässä kohtaa muunnettu JSON lähtee palvelimelle")
+  }
+
   /*make out file*/
   function openFileSmb(btn){
     temp = "";
