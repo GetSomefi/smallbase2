@@ -1,6 +1,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <title>Smallbase 2</title>
   <style>
 
   </style>
@@ -91,7 +92,7 @@
 
   var temp = "";
   var p = [];
-  function jsonPrinter(o,depth,parentKey,last,lastObject){
+  function jsonPrinter(file,o,depth,parentKey,last,lastObject){
     for(var index in o) {
       var attr = o[index];
 
@@ -121,7 +122,7 @@
         lastObject.obj = lastObject.objTemp;
         temp += "<div data-objpath="+lastObject.obj+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+index+"</span></div>";
         for(var key in attr){
-          jsonPrinter(attr[key],depth,key,last,lastObject);
+          jsonPrinter(file,attr[key],depth,key,last,lastObject);
         }
       }else{
         //lastObject.obj = lastObject.objTemp;
@@ -134,7 +135,7 @@
         }
 
         var d = depth + 1;
-        temp += "<div data-objpath="+lastObject.objTemp+" class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span onclick='sbDataModify(event)' class='child-span"+additionalClass+"'>"+attr+"</span></div>";
+        temp += "<div data-objpath="+lastObject.objTemp+" class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span onclick='sbDataModify(event)' data-file="+file+" class='child-span"+additionalClass+"'>"+attr+"</span></div>";
       }
       //console.log("lastObject ", lastObject);
     }
@@ -145,10 +146,10 @@
       var el = e.target;
       var elParent = el.parentElement;
       console.log(el);
+      console.log(elParent);
 
       el.contentEditable = 'true';
       el.classList.add("sb-modifier-active");
-
 
       if( document.getElementById('save-button') ){
         document.getElementById('save-button').remove();
@@ -159,6 +160,9 @@
         }
         saveBtn.id = 'save-button';
         saveBtn.innerHTML = "Save";
+        saveBtn.dataset.file = el.dataset.file;
+        saveBtn.dataset.user = "admin";
+        saveBtn.dataset.path = elParent.dataset.objpath;
         elParent.appendChild(saveBtn);
       }
 
@@ -166,13 +170,59 @@
   }
 
   function sbDataSave(e,el){
-    console.log("das",el);
+    console.log("Element ",el);
+    console.log("Btn ",e.target);
+
+    var theElement = document.getElementsByClassName("sb-modifier-active");
+    theElement = theElement[0];
+
     el.classList.remove("sb-modifier-active");
     el.classList.add("sb-modifier-saving");
     console.log("Tässä kohtaa muunnettu JSON lähtee palvelimelle")
+
+    console.log("Wait");
+
+    var btn = e.target;
+    btn.classList.add("active");
+    var file = btn.dataset.file;
+    file = file.split(".")[0];
+    var user = btn.dataset.user;
+    var path = btn.dataset.path;
+    var changedcontent = theElement.innerHTML;
+
+    console.log(file,user);
+
+    console.log("old", currentSBUnderEdit);
+    console.log("changing ", currentSBUnderEdit[path] );
+    console.log("with ", changedcontent );
+    currentSBUnderEdit[path] = changedcontent;
+    console.log("new", currentSBUnderEdit);
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("Done");
+        var r = JSON.parse(this.responseText);
+        console.log(r);
+      }
+    };
+
+    var data = {
+      whattodo:"updatesmb",
+      filename:file,
+      user:user,
+      newcontent:currentSBUnderEdit
+    };
+    console.log(data);
+    var url = document.location.hostname+'/createfile?json=write&data=' + JSON.stringify(data);
+    console.log(url);
+    xhttp.open("GET", url, true);
+    xhttp.send();
+
   }
 
   /*make out file*/
+  var currentSBUnderEdit;
   function openFileSmb(btn){
     temp = "";
     if( document.getElementById("content-of-SB") ){
@@ -208,7 +258,8 @@
           objTemp:"",
           obj:""
         }
-        var sb = jsonPrinter(r.content,0,false,"",lastObject);
+        currentSBUnderEdit = r.content;
+        var sb = jsonPrinter(file,r.content,0,false,"",lastObject);
 
         document.getElementById("list-of-smbs").innerHTML += "<div id='content-of-SB' class='smb-opened'>" + sb + "</div>";
       }

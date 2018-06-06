@@ -146,6 +146,17 @@ http.createServer(function (req, res) {
               });
 
 
+            }else if(dataJSON.whattodo == "updatesmb"){
+              console.log("filename ",dataJSON.filename);
+              console.log("content ",dataJSON.newcontent);
+
+              fs.writeFile( dataJSON.user + "_smb/" + dataJSON.filename + '.json', JSON.stringify(dataJSON.newcontent), function (err) {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                if (err) throw err;
+                var data = {success:true};
+                res.end(JSON.stringify(data));
+              });
+
             }else if(dataJSON.whattodo == "openfile"){
               res.writeHead(200, { 'Content-Type': 'application/json' });
               fs.readFile(dataJSON.filename, 'UTF-8', function (err,d) {
