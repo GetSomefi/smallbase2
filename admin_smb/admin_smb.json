@@ -1,1 +1,22 @@
-{"Name":"Just a tesdsdst JSON moroooo","Text":"Nothing serious here!","Example":false,"Example2":true,"Number":123456789,"Scandal":"Tässä jotain suomeksi. Öö, miksi?"}
+{
+    "Name": "Matti Mertanen",
+    "Address": "Messukatu 123",
+    "Age": 40,
+    "Family":{
+      "Wife": {
+          "Name": "Martta Mertanen",
+          "Age": 36,
+          "Relatives":{
+            "Mother":{
+              "Name":"Irma Suontausta",
+              "Age": 76
+            },
+            "Father":{
+              "Name":"Eero 'Elvis' Marttila",
+              "Age": 79
+            }
+          }
+      },
+      "Children": ["Timo","Taina","Pekkis"]
+    }
+}
