@@ -57,7 +57,8 @@
     background: #ff6ce3;
 }
 
-#save-button {
+#save-button,
+#sb-add-save{
     background: #46ff48 !important;
     display: inline-block;
     font-size: 1em;
@@ -71,4 +72,15 @@
 }
 .sb-modifier-saving{
   border: 1px solid red;
+}
+.add-inner-row, .add-row {
+    background: #ff8700;
+    padding: 4px 5px;
+    font-size: 10px;
+    font-family: helvetica;
+    text-transform: uppercase;
+    display: inline-block;
+    margin: 1px 5px;
+    cursor: hand;
+    cursor: pointer;
 }

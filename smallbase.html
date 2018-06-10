@@ -100,7 +100,7 @@
         depth++;
         last = parentKey;
         var firstLevel = lastObject.obj + "." + last;
-        temp += "<div data-objpath="+firstLevel+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+parentKey+"</span></div>";
+        temp += "<div data-objpath="+firstLevel+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+parentKey+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+firstLevel+">+</span></div>";
       }
 
       if(parentKey){
@@ -120,7 +120,7 @@
       if( typeof attr === 'object' ){
         depth++;
         lastObject.obj = lastObject.objTemp;
-        temp += "<div data-objpath="+lastObject.obj+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+index+"</span></div>";
+        temp += "<div data-objpath="+lastObject.obj+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+index+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+lastObject.objTemp+">+</span></div>";
         for(var key in attr){
           jsonPrinter(file,attr[key],depth,key,last,lastObject);
         }
@@ -135,11 +135,64 @@
         }
 
         var d = depth + 1;
-        temp += "<div data-objpath="+lastObject.objTemp+" class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span onclick='sbDataModify(event)' data-file="+file+" class='child-span"+additionalClass+"'>"+attr+"</span></div>";
+        temp += "<div data-objpath="+lastObject.objTemp+" class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span onclick='sbDataModify(event)' data-file="+file+" class='child-span"+additionalClass+"'>"+attr+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+lastObject.objTemp+">+</span></div><div data-file="+file+" data-objpathBefore="+lastObject.objTemp+" class='add-row'>+ Row</div>";
       }
       //console.log("lastObject ", lastObject);
     }
     return temp;
+  }
+
+  function sbDataModifyAddChildSave(e){
+    var el = e.target;
+    var elParent = el.parentElement;
+    console.log(el);
+    console.log(elParent);
+
+    var user = "admin";
+    var file = el.dataset.file;
+    var objpath = el.dataset.objpath;
+    var newKey = document.getElementById("key").value;
+    var newVal = document.getElementById("val").value;
+
+    console.log("old", currentSBUnderEdit);
+    if( typeof currentSBUnderEdit[objpath] !== 'object' ){
+      console.log('Not object, yet');
+      currentSBUnderEdit[objpath] = {};
+    }
+
+    currentSBUnderEdit[objpath][newKey] = newVal;
+    console.log("new", currentSBUnderEdit);
+
+    if( document.getElementById('sb-add-window') ){
+    //  document.getElementById('sb-add-window').remove;
+    }
+
+    updateSB(file,user,currentSBUnderEdit);
+
+  }
+
+  function sbDataModifyAddChild(e){
+    var el = e.target;
+    var elParent = el.parentElement;
+    console.log(el);
+    console.log(elParent);
+
+    var objpath = el.dataset.objpath;
+
+    if( document.getElementById('sb-add-window') ){
+      document.getElementById('sb-add-window').remove();
+    }
+
+    var c = "<div id='sb-add-window' data-file='"+el.dataset.file+"'>";
+      c += "<div>Give key and value</div>";
+      c += "<div>";
+        c += "<input placeholder='Key' id='key'><input placeholder='Value' id='val'>";
+      c += "</div>";
+      c += "<button onclick='sbDataModifyAddChildSave(event)' data-file='"+el.dataset.file+"' data-objpath='"+objpath+"' id='sb-add-save'>Save</button>";
+    c += "</div>";
+    el.parentElement.innerHTML += c;
+
+    console.log("current", currentSBUnderEdit);
   }
 
   function sbDataModify(e){
@@ -178,7 +231,7 @@
 
     el.classList.remove("sb-modifier-active");
     el.classList.add("sb-modifier-saving");
-    console.log("Tässä kohtaa muunnettu JSON lähtee palvelimelle")
+    //console.log("Tässä kohtaa muunnettu JSON lähtee palvelimelle")
 
     console.log("Wait");
 
@@ -198,6 +251,11 @@
     currentSBUnderEdit[path] = changedcontent;
     console.log("new", currentSBUnderEdit);
 
+    updateSB(file,user,currentSBUnderEdit);
+
+  }
+
+  function updateSB(file,user,currentSBUnderEdit){
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
@@ -218,7 +276,6 @@
     console.log(url);
     xhttp.open("GET", url, true);
     xhttp.send();
-
   }
 
   /*make out file*/
