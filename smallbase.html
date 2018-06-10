@@ -93,51 +93,64 @@
   var temp = "";
   var p = [];
   function jsonPrinter(file,o,depth,parentKey,last,lastObject){
-    for(var index in o) {
-      var attr = o[index];
+    if(parentKey && last != parentKey && typeof o === 'object'){
+      depth++;
+      last = parentKey;
+      var firstLevel = lastObject.obj + "." + last;
+      temp += "<div>first level</div><div data-objpath="+firstLevel+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+parentKey+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+firstLevel+">+</span></div>";
+    }
 
-      if(parentKey && last != parentKey){
-        depth++;
-        last = parentKey;
-        var firstLevel = lastObject.obj + "." + last;
-        temp += "<div data-objpath="+firstLevel+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+parentKey+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+firstLevel+">+</span></div>";
-      }
+    if(parentKey){
+      lastObject.objTemp = parentKey + "." + index;
+    }else{
+      lastObject.objTemp = index;
+    }
 
-      if(parentKey){
-        lastObject.objTemp = parentKey + "." + index;
-      }else{
-        lastObject.objTemp = index;
-      }
+    if( lastObject.obj == "" ){
+      lastObject.objTemp = lastObject.objTemp;
+    }else{
+      lastObject.objTemp = lastObject.obj + "." + lastObject.objTemp;
+    }
 
-      if( lastObject.obj == "" ){
-        lastObject.objTemp = lastObject.objTemp;
-      }else{
-        lastObject.objTemp = lastObject.obj + "." + lastObject.objTemp;
-      }
+    if( typeof o === 'object' ){
+      for(var index in o) {
+        var attr = o[index];
 
+        if( typeof attr === 'object' ){
+          depth++;
+          lastObject.obj = lastObject.objTemp;
+          temp += "<div>on obj</div><div data-objpath="+lastObject.obj+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+index+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+lastObject.objTemp+">+</span></div>";
+          for(var key in attr){
+            jsonPrinter(file,attr[key],depth,key,last,lastObject);
+          }
+        }else{
+          //lastObject.obj = lastObject.objTemp;
+          //lastObject.objTemp = parentKey + "." + index;
+          var additionalClass = "";
+          if( Number.isInteger(attr) ){
+            additionalClass = " index-is-number";
+          }else if( typeof attr === 'boolean' ){
+            additionalClass = " index-is-boolean";
+          }
 
-
-      if( typeof attr === 'object' ){
-        depth++;
-        lastObject.obj = lastObject.objTemp;
-        temp += "<div data-objpath="+lastObject.obj+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+index+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+lastObject.objTemp+">+</span></div>";
-        for(var key in attr){
-          jsonPrinter(file,attr[key],depth,key,last,lastObject);
+          var d = depth + 1;
+          temp += "<div>just row</div><div data-objpath="+lastObject.objTemp+" class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span onclick='sbDataModify(event)' data-file="+file+" class='child-span"+additionalClass+"'>"+attr+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+lastObject.objTemp+">+</span></div><div data-file="+file+" data-objpathBefore="+lastObject.objTemp+" class='add-row'>+ Row</div>";
         }
-      }else{
-        //lastObject.obj = lastObject.objTemp;
-        //lastObject.objTemp = parentKey + "." + index;
-        var additionalClass = "";
-        if( Number.isInteger(attr) ){
-          additionalClass = " index-is-number";
-        }else if( typeof attr === 'boolean' ){
-          additionalClass = " index-is-boolean";
-        }
-
-        var d = depth + 1;
-        temp += "<div data-objpath="+lastObject.objTemp+" class='depth-val-"+d+" row-inner'><span class='parent-span'>"+index+"</span><span onclick='sbDataModify(event)' data-file="+file+" class='child-span"+additionalClass+"'>"+attr+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+lastObject.objTemp+">+</span></div><div data-file="+file+" data-objpathBefore="+lastObject.objTemp+" class='add-row'>+ Row</div>";
+        //console.log("lastObject ", lastObject);
       }
-      //console.log("lastObject ", lastObject);
+    }else{
+      var attr = o;
+      //lastObject.obj = lastObject.objTemp;
+      //lastObject.objTemp = parentKey + "." + index;
+      var additionalClass = "";
+      if( Number.isInteger(attr) ){
+        additionalClass = " index-is-number";
+      }else if( typeof attr === 'boolean' ){
+        additionalClass = " index-is-boolean";
+      }
+
+      var d = depth + 1;
+      temp += "<div>just rowelse</div><div data-objpath="+lastObject.objTemp+" class='depth-val-"+d+" row-inner'><span class='parent-span'>"+parentKey+"</span><span onclick='sbDataModify(event)' data-file="+file+" class='child-span"+additionalClass+"'>"+attr+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+lastObject.objTemp+">+</span></div><div data-file="+file+" data-objpathBefore="+lastObject.objTemp+" class='add-row'>+ Row</div>";
     }
     return temp;
   }
@@ -316,7 +329,8 @@
           obj:""
         }
         currentSBUnderEdit = r.content;
-        var sb = jsonPrinter(file,r.content,0,false,"",lastObject);
+        console.log(currentSBUnderEdit);
+        var sb = jsonPrinter(file,currentSBUnderEdit,0,false,"",lastObject);
 
         document.getElementById("list-of-smbs").innerHTML += "<div id='content-of-SB' class='smb-opened'>" + sb + "</div>";
       }
