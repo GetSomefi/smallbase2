@@ -1,0 +1,51 @@
+
+<div id="siteHeroImage">
+</div>
+<h1 id="siteHeader">This should be replaced with a real header</h1>
+<p id="paragraph1">
+  Starttaa serveri:<br />
+  cd /var/www/html/nodejs_jutut<br />
+  nodemon server.js
+</p>
+<p>
+  Saitti löytyy:<br />
+  <a href="http://localhost:8080/sb2">http://localhost:8080/sb2</a>
+</p>
+<div>
+  <video>
+    <source src="/video/toystory.mp4" type="video/mp4">
+  </video>
+</div>
+<script type="text/javascript">
+function fetchContent(){
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log("Done");
+      var r = JSON.parse(this.responseText);
+      console.log(r);
+
+      for(var key in r.content){
+        console.log(r.content[key]);
+        if(document.getElementById(key)){
+          if(key == "siteHeroImage"){
+            document.getElementById(key).innerHTML = "<img src='"+r.content[key]+"' alt='' />";
+          }else{
+            document.getElementById(key).innerHTML = r.content[key];
+          }
+        }
+      }
+    }
+  };
+
+  var data = {
+    whattodo:"opensmbs",
+    user:"admin",
+    filename:"testweb"
+  };
+  var url = document.location.hostname+'/createfile?json=write&data=' + JSON.stringify(data);
+  xhttp.open("GET", url, true);
+  xhttp.send();
+}
+fetchContent();
+</script>

@@ -1,0 +1,7 @@
+{
+    "purpose": "this is sites main json file",
+    "application": "Node.js",
+    "siteHeroImage": "/img/isoneva_matas-1024x576.jpg",
+    "siteHeader": "GetSOME Node.js",
+    "paragraph1": "Jotain tarinaa"
+}
