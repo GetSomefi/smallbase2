@@ -33,15 +33,19 @@ http.createServer(function (req, res) {
     }else if(req.url.indexOf('.js') != -1){ //req.url has the pathname, check if it conatins '.css'
       fs.readFile(__dirname + 'js/script.js', function (err, data) {
         if (err) console.log(err);
-        res.writeHead(200, {'Content-Type': 'text/javascript'});
+        res.writeHead(200, {'Content-Type': 'application/javascript'});
         res.write(data);
         res.end();
       });
-    }else if( //serve images
+    }else if( //serve images and mp4
+      //test http://localhost:8080/img/isoneva_matas-1024x576.jpg
       req.url.indexOf('.gif') != -1 ||
       req.url.indexOf('.png') != -1 ||
       req.url.indexOf('.jpeg') != -1 ||
-      req.url.indexOf('.jpg') != -1
+      req.url.indexOf('.jpg') != -1 ||
+      req.url.indexOf('.mp4') != -1 ||
+      req.url.indexOf('.svg') != -1
+
     ){ //req.url has the pathname, check if it conatins '.css'
       console.log(req.url);
 
@@ -51,11 +55,12 @@ http.createServer(function (req, res) {
         var expression = req.url.split('.')[1];
         var ctype = "";
         switch (expression) {
-          case "gif": ctype="image/gif"; break;
-          case "png": ctype="image/png"; break;
           case "jpeg":
           case "jpg": ctype="image/jpeg"; break;
-          case expression:
+          case "gif": ctype="image/gif"; break;
+          case "png": ctype="image/png"; break;
+          case "svg": ctype="image/svg+xml"; break;
+          case "mp4": ctype="video/mp4"; break;
 
             break;
           default:
