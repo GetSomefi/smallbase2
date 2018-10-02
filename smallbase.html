@@ -93,28 +93,39 @@
   var temp = "";
   var p = [];
   function jsonPrinter(file,o,depth,parentKey,last,lastObject){
+    console.log("eka",lastObject);
+    console.log("file,o,depth,parentKey,last,lastObject");
+    console.log(file);
+    console.log(o);
+    console.log(depth);
+    console.log(parentKey);
+    console.log(last);
+    console.log(lastObject);
+    
     if(parentKey && last != parentKey && typeof o === 'object'){
       depth++;
       last = parentKey;
       var firstLevel = lastObject.obj + "." + last;
+      console.log("sdadsadsadsa",firstLevel);
       temp += "<div>first level</div><div data-objpath="+firstLevel+" class='depth-val-"+depth+" parent-for-object'><span class='parent-span'>"+parentKey+"</span><span onclick='sbDataModifyAddChild(event)' class='add-inner-row' data-objpath="+firstLevel+">+</span></div>";
     }
 
-    if(parentKey){
-      lastObject.objTemp = parentKey + "." + index;
-    }else{
-      lastObject.objTemp = index;
-    }
-
-    if( lastObject.obj == "" ){
-      lastObject.objTemp = lastObject.objTemp;
-    }else{
-      lastObject.objTemp = lastObject.obj + "." + lastObject.objTemp;
-    }
 
     if( typeof o === 'object' ){
       for(var index in o) {
         var attr = o[index];
+
+        if(parentKey){
+          lastObject.objTemp = parentKey + "." + index;
+        }else{
+          lastObject.objTemp = index;
+        }
+
+        if( !lastObject.obj ){
+          lastObject.objTemp = lastObject.objTemp;
+        }else{
+          lastObject.objTemp = lastObject.obj + "." + lastObject.objTemp;
+        }
 
         if( typeof attr === 'object' ){
           depth++;
@@ -325,12 +336,14 @@
         var r = JSON.parse(this.responseText);
 
         var lastObject = {
-          objTemp:"",
-          obj:""
+          objTemp:false,
+          obj:false
         }
         currentSBUnderEdit = r.content;
         console.log(currentSBUnderEdit);
-        var sb = jsonPrinter(file,currentSBUnderEdit,0,false,"",lastObject);
+
+               //jsonPrinter(file,o,depth,parentKey,last,lastObject){
+        var sb = jsonPrinter(file,currentSBUnderEdit,0,false,false,lastObject);
 
         document.getElementById("list-of-smbs").innerHTML += "<div id='content-of-SB' class='smb-opened'>" + sb + "</div>";
       }

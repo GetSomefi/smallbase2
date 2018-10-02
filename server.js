@@ -31,12 +31,41 @@ http.createServer(function (req, res) {
         res.end();
       });
     }else if(req.url.indexOf('.js') != -1){ //req.url has the pathname, check if it conatins '.css'
-          fs.readFile(__dirname + 'js/script.js', function (err, data) {
-            if (err) console.log(err);
-            res.writeHead(200, {'Content-Type': 'text/javascript'});
-            res.write(data);
-            res.end();
-          });
+      fs.readFile(__dirname + 'js/script.js', function (err, data) {
+        if (err) console.log(err);
+        res.writeHead(200, {'Content-Type': 'text/javascript'});
+        res.write(data);
+        res.end();
+      });
+    }else if( //serve images
+      req.url.indexOf('.gif') != -1 ||
+      req.url.indexOf('.png') != -1 ||
+      req.url.indexOf('.jpeg') != -1 ||
+      req.url.indexOf('.jpg') != -1
+    ){ //req.url has the pathname, check if it conatins '.css'
+      console.log(req.url);
+
+      fs.readFile(__dirname + req.url, function (err, data) {
+        if (err) console.log(err);
+
+        var expression = req.url.split('.')[1];
+        var ctype = "";
+        switch (expression) {
+          case "gif": ctype="image/gif"; break;
+          case "png": ctype="image/png"; break;
+          case "jpeg":
+          case "jpg": ctype="image/jpeg"; break;
+          case expression:
+
+            break;
+          default:
+        }
+
+        res.writeHead(200, {'Content-Type': ctype});
+        res.write(data);
+        res.end();
+      });
+
     }else if(req.url == "/home"){
       fs.readFile('home.html', function(err, data) {
         res.writeHead(200, {'Content-Type': 'text/html'});
@@ -49,10 +78,21 @@ http.createServer(function (req, res) {
         res.write(data);
         res.end();
       });
-    }else if(req.url == "/sb2"){
+    }else if(req.url == "/sb2" || req.url == "/smallbase" ){
       fs.readFile('smallbase.html', function(err, data) {
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.write(data);
+        res.end();
+      });
+    }else if(req.url == "/testweb" ){
+      var pageTitle = 'This is as fast as it can get!';
+      var htmlStart = '<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8"><title>'+pageTitle+'</title></head><body>';
+      var htmlEnd = '  </body></html>';
+      fs.readFile('testWebPage.html', function(err, data) {
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.write(htmlStart);
+        res.write(data);
+        res.write(htmlEnd);
         res.end();
       });
     }else{
