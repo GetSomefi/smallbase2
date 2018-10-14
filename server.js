@@ -4,24 +4,10 @@ var urlMod = require('url');
 var fs = require('fs');
 
 //var express = require('express');
-//var app = express(); 
+//var app = express();
 
 http.createServer(function (req, res) {
-    /*
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write("The date and time are currently: " + dt.myDateTime());
-    res.write("<br />Jou Hey,<br />");
-    res.write(req.url);
-    */
 
-    /*
-    var q = urlMod.parse(req.url, true).query;
-    if(q.data){
-      res.write("<br />Got this parameter: " + q.data);
-    }else{
-      res.write("<br />Use parameter ?data=[command]");
-    }
-    */
     if(req.url.indexOf('.css') != -1){ //req.url has the pathname, check if it conatins '.css'
       fs.readFile('css/style.css', function (err, data) {
         console.log("css request");
