@@ -1,10 +1,10 @@
 var http = require('http');
 var urlMod = require('url');
-var dt = require('./timeModule');
+//var dt = require('./timeModule');
 var fs = require('fs');
 
-var express = require('express');
-var app = express();
+//var express = require('express');
+//var app = express(); 
 
 http.createServer(function (req, res) {
     /*
