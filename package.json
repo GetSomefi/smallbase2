@@ -1,0 +1,8 @@
+{
+  "name": "SmallBase2",
+  "description": "The Smallest database",
+  "version": "0.0.1",
+  "engines": {
+    "npm": "10.6.x"
+  }
+}
