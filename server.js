@@ -14,10 +14,10 @@ let server = http.createServer(function (req, res) {
       if (err) console.log(err);
       res.writeHead(200, {'Content-Type': 'text/css'});
       res.write(data);
-      res.end();
+      res.end(); 
     });
   }else if(req.url.indexOf('.css') != -1){ //req.url has the pathname, check if it conatins '.css'
-      fs.readFile('css/style.css', function (err, data) {
+      fs.readFile(__dirname + req.url, function (err, data) {
         console.log("css request");
         if (err) console.log(err);
         res.writeHead(200, {'Content-Type': 'text/css'});
@@ -25,11 +25,18 @@ let server = http.createServer(function (req, res) {
         res.end();
       });
     }else if(req.url.indexOf('.js') != -1){ //req.url has the pathname, check if it conatins '.css'
-      fs.readFile(__dirname + 'js/script.js', function (err, data) {
-        if (err) console.log(err);
-        res.writeHead(200, {'Content-Type': 'application/javascript'});
-        res.write(data);
-        res.end();
+      fs.readFile(__dirname + req.url, function (err, data) {
+        if (err){ 
+          //error handling
+          console.log(err);
+          res.writeHead(404, {"Content-Type": "text/plain"});
+          res.write("404 WHOOAH! JS-file was not found\n");
+          res.end();
+        }else{
+          res.writeHead(200, {'Content-Type': 'application/javascript'});
+          res.write(data);
+          res.end();
+        }
       });
     }else if( //serve images and mp4
       //test http://localhost:8080/img/isoneva_matas-1024x576.jpg

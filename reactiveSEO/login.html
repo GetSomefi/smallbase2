@@ -8,11 +8,14 @@
 		body{
 			margin: 0;
 		    height: 100vh;
+		    /*
 		    background-image: url(reactiveSEO/img/bg.jpg);
 		    background-position: -420px center;
     		background-size: auto 100%;
+    		*/
 		}
-
+		
+		/*
 		.gradient {
 		    background: linear-gradient(to bottom, rgba(162,146,199,1) 0%,rgba(79,80,97,0.6) 100%);
 		    height: 100vh;
@@ -22,11 +25,20 @@
 		    left: 0;
 		    width: 100%;
 		}
+		*/
+		bg-gradient {
+	        position: absolute;
+	        top: 0;
+	        left: 0;
+	        height: 100vh;
+	        width: 100vw;
+	    }
 
 		main{
 			max-width: 400px;
 			margin: 15px;
 			position: relative;
+			z-index: 1;
 		}
 		header{
 			display: flex;
@@ -83,7 +95,8 @@
 	</style>
 </head>
 <body>
-	<div class="gradient"></div>
+	<!-- Tip: try without bgSrc-attribute -->
+	<bg-gradient bgSrc="reactiveSEO/img/bg.jpg"></bg-gradient>
 	<main>
 		<header>
 			<div class="logo">
@@ -96,8 +109,9 @@
 			<button class="fancybutton prevent-highlight">Press this</button>
 		</section>
 	</main>
+	
 </body>
-
+<script src="reactiveSEO_modules/bgGradient.js"></script>
 <script type="text/javascript">
 	let menuHolder = document.getElementById("valikko-holder");
 
