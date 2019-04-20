@@ -1,14 +1,22 @@
-var http = require('http');
-var urlMod = require('url');
+let http = require('http');
+let urlMod = require('url');
 //var dt = require('./timeModule');
-var fs = require('fs');
+let fs = require('fs');
 
 //var express = require('express');
 //var app = express();
 
-http.createServer(function (req, res) {
-
-    if(req.url.indexOf('.css') != -1){ //req.url has the pathname, check if it conatins '.css'
+let server = http.createServer(function (req, res) {
+  //console.log('res ', res); 
+  if(req.url.indexOf('testStyle.css') != -1){ //req.url has the pathname, check if it conatins '.css'
+    fs.readFile('css/testStyle.css', function (err, data) {
+      console.log("css test request");
+      if (err) console.log(err);
+      res.writeHead(200, {'Content-Type': 'text/css'});
+      res.write(data);
+      res.end();
+    });
+  }else if(req.url.indexOf('.css') != -1){ //req.url has the pathname, check if it conatins '.css'
       fs.readFile('css/style.css', function (err, data) {
         console.log("css request");
         if (err) console.log(err);
@@ -33,44 +41,66 @@ http.createServer(function (req, res) {
       req.url.indexOf('.svg') != -1
 
     ){ //req.url has the pathname, check if it conatins '.css'
-      console.log(req.url);
+      //console.log(req.url);
 
       fs.readFile(__dirname + req.url, function (err, data) {
-        if (err) console.log(err);
-
-        var expression = req.url.split('.')[1];
-        var ctype = "";
-        switch (expression) {
-          case "jpeg":
-          case "jpg": ctype="image/jpeg"; break;
-          case "gif": ctype="image/gif"; break;
-          case "png": ctype="image/png"; break;
-          case "svg": ctype="image/svg+xml"; break;
-          case "mp4": ctype="video/mp4"; break;
+        if (err){ 
+          //error handling
+          console.log(err);
+          res.writeHead(404, {"Content-Type": "text/plain"});
+          res.write("404 WHOOAH! Media was not found\n");
+          res.end();
+        }else{
+          var expression = req.url.split('.')[1];
+          var ctype = "";
+          switch (expression) {
+            case "jpeg":
+            case "jpg": ctype="image/jpeg"; break;
+            case "gif": ctype="image/gif"; break;
+            case "png": ctype="image/png"; break;
+            case "svg": ctype="image/svg+xml"; break;
+            case "mp4": ctype="video/mp4"; break;
 
             break;
-          default:
-        }
+            default:
+          }
 
-        res.writeHead(200, {'Content-Type': ctype});
-        res.write(data);
-        res.end();
+          res.writeHead(200, {'Content-Type': ctype});
+          res.write(data);
+          res.end();
+        }
       });
 
     }else if(req.url == "/home"){
       fs.readFile('home.html', function(err, data) {
+        if (err) console.log(err);
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.write(data);
+        res.end();
+      });
+    }else if(req.url == "/seo"){
+      fs.readFile('reactiveSEO/seo.html', function(err, data) {
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.write(data);
+        res.end();
+      });
+    }else if(req.url == "/login"){
+      fs.readFile('reactiveSEO/login.html', function(err, data) {
+        if (err) console.log(err);
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.write(data);
         res.end();
       });
     }else if(req.url == "/filesystem"){
       fs.readFile('createfile.html', function(err, data) {
+        if (err) console.log(err);
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.write(data);
         res.end();
       });
     }else if(req.url == "/sb2" || req.url == "/smallbase" ){
       fs.readFile('smallbase.html', function(err, data) {
+        if (err) console.log(err);
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.write(data);
         res.end();
@@ -227,15 +257,24 @@ http.createServer(function (req, res) {
 
         }
       }else{
+        /*
         fs.readFile('index.html', function(err, data) {
           res.writeHead(200, {'Content-Type': 'text/html'});
           res.write(data);
           res.end();
         });
+        */
+        res.writeHead(404, {"Content-Type": "text/html"});
+        res.write('<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>404 Error</title></head><body>');
+        res.write('<div style="width:100%;height:0;padding-bottom:56%;position:relative;"><iframe src="https://giphy.com/embed/3oEjHGrVGrqgFFknfO" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p style="margin-top: -35px;z-index: 1;position: relative;padding: 10px;"><a href="https://giphy.com/gifs/comic-con-jack-sparrow-sdcc2016-3oEjHGrVGrqgFFknfO">via GIPHY</a></p>');
+        res.write("<h1>No no no no this can't be happening!</h1>");
+        res.write("Content was not found<br>");
+        res.write("Url that you tried to access was:<br>");
+        res.write("<strong>" + req.url + "</strong><br><br>");
+        res.write("<a href='login'>Maybe go here?</a><br>");
+        res.write("</body></html>");
+        res.end();
       }
     }
-
-
-
     //res.end();
 }).listen(8080);
