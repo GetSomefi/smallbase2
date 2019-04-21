@@ -6,6 +6,22 @@ let fs = require('fs');
 //var express = require('express');
 //var app = express();
 
+/*
+<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBb_swu986rUALBaKuFODg7Q-J821jCanU",
+    authDomain: "reactiveseo.firebaseapp.com",
+    databaseURL: "https://reactiveseo.firebaseio.com",
+    projectId: "reactiveseo",
+    storageBucket: "reactiveseo.appspot.com",
+    messagingSenderId: "89990520125"
+  };
+  firebase.initializeApp(config);
+</script>
+*/
+
 let server = http.createServer(function (req, res) {
   //console.log('res ', res); 
   if(req.url.indexOf('testStyle.css') != -1){ //req.url has the pathname, check if it conatins '.css'

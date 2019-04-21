@@ -13,24 +13,30 @@ class basicLogin extends HTMLElement {
 	<button class="fancybutton prevent-highlight">Login</button>
 	*/
 
-	var elMaster = document.createElement('div');
+	let elMaster = document.createElement('div');
 	elMaster.classList = "basic-login-holder";
 
-	var el = document.createElement('input');
+	let el = document.createElement('input');
 	el.classList = "inputbox input-username";
 	el.placeholder = "Username";
 	el.autocomplete = "off";
 	el.type = "text";
 
-	var el2 = document.createElement('input');
+	let el2 = document.createElement('input');
 	el2.classList = "inputbox input-password";
 	el2.placeholder = "Password";
 	el2.autocomplete = "off";
 	el2.type = "password";
 
-	var el3 = document.createElement('button');
+	let el3 = document.createElement('button');
 	el3.classList = "fancybutton prevent-highlight";
 	el3.textContent = "Login";
+
+	el3.addEventListener("click", function(){
+		let username = el.value;
+		let password = el2.value;
+		console.log('submit', username , password); 
+	});
 
 	elMaster.appendChild(el);
 	elMaster.appendChild(el2);
@@ -54,6 +60,8 @@ class basicLogin extends HTMLElement {
 		'font-size: 1.2em;' +
 		'border-bottom: 1px solid rgba(255, 255, 255, 0.7);' +
 		'border-radius:0;' +
+		'font-family: var(--button-font);' +
+		'outline: none !important;'+
 		//'' +
 	'}' +
 

@@ -1,9 +1,22 @@
 {
-  "name": "SmallBase2",
-  "description": "The Smallest database",
-  "version": "0.0.1",
-  "engines": {
-    "npm": "10.6.x"
+  "name": "nodejs_jutut",
+  "version": "1.0.0",
+  "description": "Small Base 2 test version",
+  "main": "server.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "dependencies": {}
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GetSomefi/smallbase2.git"
+  },
+  "author": "GetSOME / Peter Virtanen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GetSomefi/smallbase2/issues"
+  },
+  "homepage": "https://github.com/GetSomefi/smallbase2#readme"
 }

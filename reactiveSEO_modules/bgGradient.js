@@ -53,10 +53,17 @@ class bgGradient extends HTMLElement {
       '.bg-image {' +
         'height: 100vh;'+
         'background-image: url('+bgSrc+');'+
-        'background-position: -420px center;'+
+        'background-position: -620px center;'+
         'background-size: auto 100%;'+
-      '}';
-      
+      '}'+
+
+      '@media ( min-width:500px ){' +
+        '.bg-image {' +
+          'background-size: cover;'+
+          'background-position: center;'+
+        '}'+
+      '}'+
+
       shadow.appendChild(style);
     }
   }

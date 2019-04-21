@@ -3,11 +3,12 @@
 <head>
 	<title>Interactiivinen menu icon</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Quicksand" rel="stylesheet">
 	<style type="text/css">
 		body{
 			margin: 0;
 		    height: 100vh;
+		    font-family: 'Open Sans', sans-serif;
 		    /*
 		    background-image: url(reactiveSEO/img/bg.jpg);
 		    background-position: -420px center;
@@ -34,11 +35,13 @@
 	        width: 100vw;
 	    }
 
-		main{
-			max-width: 400px;
-			margin: 15px;
-			position: relative;
-			z-index: 1;
+		main#login {
+		    max-width: 400px;
+		    margin: 15px;
+		    position: relative;
+		    z-index: 1;
+		    padding: 0 15px;
+		    margin: auto;
 		}
 		header{
 			display: flex;
@@ -48,15 +51,16 @@
 		}
 
 		/*more about https://developers.google.com/web/updates/2016/02/css-variables-why-should-you-care?hl=en */
-		basic-login {
-        	--button-font: "Abel", sans-serif;
+		basic-login { 
+        	--base-font: 'Open Sans', sans-serif;
+        	--button-font: 'Quicksand', sans-serif;
       	}
 	</style>
 </head>
 <body>
 	<!-- Tip: try without bgSrc-attribute -->
 	<bg-gradient bgSrc="reactiveSEO/img/bg.jpg"></bg-gradient>
-	<main>
+	<main id="login">
 		<header>
 			<logo-element bgSrc="reactiveSEO/img/logo.png"></logo-element>
 		</header>
