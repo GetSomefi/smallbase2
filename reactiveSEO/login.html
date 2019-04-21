@@ -99,9 +99,7 @@
 	<bg-gradient bgSrc="reactiveSEO/img/bg.jpg"></bg-gradient>
 	<main>
 		<header>
-			<div class="logo">
-				<img src="reactiveSEO/img/logo.png">
-			</div>
+			<logo-element bgSrc="reactiveSEO/img/logo.png"></logo-element>
 		</header>
 		<section>
 			<input placeholder="Username" autocomplete="off" type="text" class="inputti">
@@ -111,25 +109,24 @@
 	</main>
 	
 </body>
+
+<!-- modules need to be combined in the end
 <script src="reactiveSEO_modules/bgGradient.js"></script>
+<script src="reactiveSEO_modules/logo.js"></script>
+ -->
+
 <script type="text/javascript">
-	let menuHolder = document.getElementById("valikko-holder");
-
-	let lineOne = document.createElement("span");
-	lineOne.id = "line1";
-	let lineTwo = document.createElement("span");
-	lineTwo.id = "line2";
-
-	let menuIcon = document.createElement("div");
-	menuIcon.id = "menu-button";
-	menuIcon.appendChild(lineOne);
-	menuIcon.appendChild(lineTwo);
-
-	let menuBtnOuter = document.createElement("div");
-	menuBtnOuter.id = "menu-holder";
-	menuBtnOuter.appendChild(menuIcon);
-
-	menuHolder.innerHTML = "";
-	menuHolder.appendChild(menuBtnOuter);
+	let moduleUrlList = [
+		"reactiveSEO_modules/bgGradient.js",
+		"reactiveSEO_modules/logo.js"
+	];
+	function loadModules(moduleUrlList) {
+		for (var i = 0; i < moduleUrlList.length; i++) {
+			let script = document.createElement("script");  // create a script DOM node
+	    	script.src = moduleUrlList[i];  // set its src to the provided URL
+	    	document.head.appendChild(script);
+		}
+	}
+	loadModules(moduleUrlList);
 </script>
 </html>
