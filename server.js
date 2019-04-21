@@ -169,9 +169,21 @@ let server = http.createServer(function (req, res) {
           db.collection("users").get().then((querySnapshot) => {
               let userData = {};
               querySnapshot.forEach((doc) => {
-                  console.log('${doc.id} => ${doc.data()}');
                   userData.docId = doc.id;
                   userData.docData = doc.data();
+
+                  //console.log('compare ', userData.docData.username, dataJSON.username); 
+                  if( userData.docData.username == dataJSON.username ){
+                    userData.usernameOk = true;
+                  }else{
+                    userData.usernameOk = false;
+                  }
+                  //console.log('compare ', userData.docData.password, dataJSON.password);
+                  if( userData.docData.password == dataJSON.password ){
+                    userData.passwordOk = true;
+                  }else{
+                    userData.passwordOk = false;
+                  }
               });
               var data = {
                 success:true,

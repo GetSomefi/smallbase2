@@ -1,4 +1,25 @@
 console.log('Basic login Init');
+
+function doTask(whattodo,username,password) {
+  console.log("Wait");
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log("Done");
+      var json = JSON.parse(this.responseText);
+      console.log(json);
+    }
+  };
+  var data = {
+    whattodo:whattodo,
+    username:username,
+    password:password
+  };
+  var url = document.location.hostname+'/createfile?json=firestore&data=' + JSON.stringify(data);
+  xhttp.open("POST", url, true);
+  xhttp.send();
+}
+
 class basicLogin extends HTMLElement {
   constructor() {
     // Always call super first in constructor
@@ -37,7 +58,9 @@ class basicLogin extends HTMLElement {
 	el3.addEventListener("click", function(){
 		let username = el.value;
 		let password = el2.value;
-		console.log('submit', username , password); 
+		console.log('submit', username , password);
+
+		doTask("checkLogin", username, password) 
 	});
 
 	elMaster.appendChild(el);

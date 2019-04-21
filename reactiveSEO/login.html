@@ -68,7 +68,6 @@
 			<basic-login></basic-login>
 		</section>
 	</main>
-	<div id="response">firestore console</div>
 </body>
 
 <!-- modules need to be combined in the end
@@ -90,27 +89,5 @@
 		}
 	}
 	loadModules(moduleUrlList);
-
-	function doTask(whattodo) {
-	  console.log("Wait");
-	  var xhttp = new XMLHttpRequest();
-	  xhttp.onreadystatechange = function() {
-	    if (this.readyState == 4 && this.status == 200) {
-	      console.log("Done");
-	      //document.getElementById("response").innerHTML = this.responseText;
-	      console.log(JSON.parse(this.responseText));
-	    }
-	  };
-	  var data = {
-	    whattodo:whattodo,
-	    //username:document.getElementById("username").value,
-	    //password:document.getElementById("password").value
-	  };
-	  var url = document.location.hostname+'/createfile?json=firestore&data=' + JSON.stringify(data);
-	  document.getElementById("response").innerHTML = url;
-	  xhttp.open("GET", url, true);
-	  xhttp.send();
-	}
-	doTask("checkLogin")
 </script>
 </html>
