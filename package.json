@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Small Base 2 test version",
   "main": "server.js",
-  "dependencies": {},
+  "dependencies": {
+    "firebase": "^5.10.0"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

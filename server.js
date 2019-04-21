@@ -1,26 +1,35 @@
 let http = require('http');
 let urlMod = require('url');
-//var dt = require('./timeModule');
 let fs = require('fs');
 
-//var express = require('express');
-//var app = express();
+var firebase = require("firebase");
 
-/*
-<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBb_swu986rUALBaKuFODg7Q-J821jCanU",
-    authDomain: "reactiveseo.firebaseapp.com",
-    databaseURL: "https://reactiveseo.firebaseio.com",
-    projectId: "reactiveseo",
-    storageBucket: "reactiveseo.appspot.com",
-    messagingSenderId: "89990520125"
-  };
-  firebase.initializeApp(config);
-</script>
-*/
+// TODO: Replace the following with your app's Firebase project configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyBb_swu986rUALBaKuFODg7Q-J821jCanU",
+  authDomain: "reactiveseo.firebaseapp.com",
+  databaseURL: "https://reactiveseo.firebaseio.com",
+  projectId: "reactiveseo",
+  storageBucket: "reactiveseo.appspot.com",
+  messagingSenderId: "89990520125"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+var db = firebase.firestore();
+db.collection("users").add({
+    first: "Ada",
+    last: "Lovelace",
+    born: 1815
+})
+.then(function(docRef) {
+    console.log("Document written with ID: ", docRef.id);
+})
+.catch(function(error) {
+    console.error("Error adding document: ", error);
+});
+
 
 let server = http.createServer(function (req, res) {
   //console.log('res ', res); 
