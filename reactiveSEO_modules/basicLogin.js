@@ -20,12 +20,14 @@ class basicLogin extends HTMLElement {
 	el.classList = "inputbox input-username";
 	el.placeholder = "Username";
 	el.autocomplete = "off";
+	el.id="username";
 	el.type = "text";
 
 	let el2 = document.createElement('input');
 	el2.classList = "inputbox input-password";
 	el2.placeholder = "Password";
 	el2.autocomplete = "off";
+	el2.id = "password";
 	el2.type = "password";
 
 	let el3 = document.createElement('button');

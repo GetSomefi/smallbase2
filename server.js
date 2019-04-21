@@ -17,11 +17,11 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+/* create simple test user with this code
 var db = firebase.firestore();
 db.collection("users").add({
-    first: "Ada",
-    last: "Lovelace",
-    born: 1815
+    username: "admin",
+    password: "admin"
 })
 .then(function(docRef) {
     console.log("Document written with ID: ", docRef.id);
@@ -29,6 +29,7 @@ db.collection("users").add({
 .catch(function(error) {
     console.error("Error adding document: ", error);
 });
+*/
 
 
 let server = http.createServer(function (req, res) {
@@ -159,7 +160,29 @@ let server = http.createServer(function (req, res) {
 
       if(q.json){
         console.log("Got request: ",q)
-        if(q.json == "write"){
+        if(q.json == "firestore"){
+          var dataJSON = JSON.parse(q.data);
+          console.log("Firestore functions init: ", dataJSON );
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+
+          var db = firebase.firestore();
+          db.collection("users").get().then((querySnapshot) => {
+              let userData = {};
+              querySnapshot.forEach((doc) => {
+                  console.log('${doc.id} => ${doc.data()}');
+                  userData.docId = doc.id;
+                  userData.docData = doc.data();
+              });
+              var data = {
+                success:true,
+                data:dataJSON,
+                userData:userData
+              };
+              res.end(JSON.stringify(data));
+          });
+
+        }
+        else if(q.json == "write"){
           if(q.data){
             var dataJSON = JSON.parse(q.data);
             console.log("There is data: ", dataJSON );
