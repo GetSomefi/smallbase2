@@ -55,7 +55,8 @@ class bgGradient extends HTMLElement {
         'background-image: url('+bgSrc+');'+
         'background-position: -420px center;'+
         'background-size: auto 100%;'+
-      '}' +
+      '}';
+      
       shadow.appendChild(style);
     }
   }

@@ -48,7 +48,8 @@ class logo extends HTMLElement {
 
       '.logo img {' +
         'max-width: 100%;'+
-      '}' +
+      '}';
+      
       shadow.appendChild(style);
     }
   }

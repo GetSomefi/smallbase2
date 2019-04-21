@@ -47,51 +47,10 @@
 			flex:1;
 		}
 
-		/*button*/
-		button.fancybutton {
-			border: none;
-			background: #E91E63;
-			padding: 15px 60px;
-			border-radius: 30px;
-			color: #FFF;
-			font-weight: bold;
-			font-size: 1.2em;
-			margin: auto;
-			margin-top: 15px;
-			display: block;
-			box-shadow: 0px 1px 2px 0px #00000082;
-			transition: all .2s linear;
-			font-family: 'Abel', sans-serif;
-			width: 100%;
-			margin-top: 30px;
-		}
-		button.fancybutton:hover{
-			transform: scale(1.05);
-		}
-
-		.logo{
-			max-width: 100%;
-		}
-		.logo img{
-			max-width: 100%;
-		}
-
-		.inputti {
-		    background-color: #54545400 !important;
-		    width: calc( 100% - 30px );
-		    margin: 0;
-		    border: 0;
-		    padding: 15px;
-		    margin-bottom: 15px;
-		    color: rgba(255, 255, 255, 0.85);
-		    font-size: 1.2em;
-		    border-bottom: 1px solid rgba(255, 255, 255, 0.7);
-		}
-		::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-		  color: rgba(255, 255, 255, 0.85);
-		  opacity: 1; /* Firefox */
-		}
-
+		/*more about https://developers.google.com/web/updates/2016/02/css-variables-why-should-you-care?hl=en */
+		basic-login {
+        	--button-font: "Abel", sans-serif;
+      	}
 	</style>
 </head>
 <body>
@@ -102,9 +61,7 @@
 			<logo-element bgSrc="reactiveSEO/img/logo.png"></logo-element>
 		</header>
 		<section>
-			<input placeholder="Username" autocomplete="off" type="text" class="inputti">
-			<input  placeholder="Password" autocomplete="off" type="password" class="inputti salasana">
-			<button class="fancybutton prevent-highlight">Press this</button>
+			<basic-login></basic-login>
 		</section>
 	</main>
 	
@@ -118,7 +75,8 @@
 <script type="text/javascript">
 	let moduleUrlList = [
 		"reactiveSEO_modules/bgGradient.js",
-		"reactiveSEO_modules/logo.js"
+		"reactiveSEO_modules/logo.js",
+		"reactiveSEO_modules/basicLogin.js"
 	];
 	function loadModules(moduleUrlList) {
 		for (var i = 0; i < moduleUrlList.length; i++) {
