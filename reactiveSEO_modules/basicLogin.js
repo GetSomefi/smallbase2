@@ -1,6 +1,6 @@
 console.log('Basic login Init');
 
-function doTask(whattodo,username,password) {
+function doTask(whattodo,username,password, usernameInput, passwordInput,elMaster) {
   console.log("Wait");
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -8,6 +8,31 @@ function doTask(whattodo,username,password) {
       console.log("Done");
       var json = JSON.parse(this.responseText);
       console.log(json);
+      
+      let iconOk = document.createElement("div");
+      iconOk.innerHTML = json.userData.iconOk;
+      let iconError = document.createElement("div");
+      iconError.innerHTML = json.userData.iconError;
+
+      console.log('svg', json.userData.iconOk); 
+      usernameInput.classList.remove("username-ok");
+      usernameInput.classList.remove("username-error");
+      passwordInput.classList.remove("password-ok");
+      passwordInput.classList.remove("username-error");
+      if(json.userData.usernameOk){
+      	usernameInput.classList.add("username-ok");
+      	usernameInput.parentNode.insertBefore(iconOk, usernameInput.nextSibling);
+      }else{
+      	usernameInput.classList.add("username-error");
+      	usernameInput.parentNode.insertBefore(iconError, usernameInput.nextSibling);
+      }
+      if(json.userData.passwordOk){
+      	passwordInput.classList.add("password-ok");
+      	passwordInput.parentNode.insertBefore(iconOk, passwordInput.nextSibling);
+      }else{
+		passwordInput.classList.add("username-error");
+		passwordInput.parentNode.insertBefore(iconError, passwordInput.nextSibling);
+      }
     }
   };
   var data = {
@@ -60,7 +85,7 @@ class basicLogin extends HTMLElement {
 		let password = el2.value;
 		console.log('submit', username , password);
 
-		doTask("checkLogin", username, password) 
+		let loginOk = doTask("checkLogin", username, password, el, el2,elMaster);
 	});
 
 	elMaster.appendChild(el);
@@ -94,6 +119,13 @@ class basicLogin extends HTMLElement {
 		'color: rgba(255, 255, 255, 0.85);' +
 		'opacity: 1;' +
 		//'' +
+	'}' +
+
+	'.username-ok, .password-ok {'+
+    	'border-bottom: 1px solid #8BC34A;'+
+	'}' +
+	'.username-error, .password-error {'+
+    	'border-bottom: 1px solid #FF5722;'+
 	'}' +
 
 	'button.fancybutton {' +

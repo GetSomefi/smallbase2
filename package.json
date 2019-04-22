@@ -4,7 +4,8 @@
   "description": "Small Base 2 test version",
   "main": "server.js",
   "dependencies": {
-    "firebase": "^5.10.0"
+    "firebase": "^5.10.0",
+    "octicons": "^8.5.0"
   },
   "devDependencies": {},
   "scripts": {

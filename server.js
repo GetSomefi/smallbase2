@@ -2,7 +2,7 @@ let http = require('http');
 let urlMod = require('url');
 let fs = require('fs');
 var firebase = require("firebase");
-
+var octicons = require("octicons");
 /*
 module.exports = {
   //contents of firebaseConfig file
@@ -17,7 +17,8 @@ var firebaseConfig = APIKEYS;
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-/* create simple test user with this code
+/*
+//create simple test user with this code
 var db = firebase.firestore();
 db.collection("users").add({
     username: "admin",
@@ -30,6 +31,7 @@ db.collection("users").add({
     console.error("Error adding document: ", error);
 });
 */
+
 
 
 let server = http.createServer(function (req, res) {
@@ -161,6 +163,8 @@ let server = http.createServer(function (req, res) {
       if(q.json){
         console.log("Got request: ",q)
         if(q.json == "firestore"){
+          
+
           var dataJSON = JSON.parse(q.data);
           console.log("Firestore functions init: ", dataJSON );
           res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -171,6 +175,9 @@ let server = http.createServer(function (req, res) {
               querySnapshot.forEach((doc) => {
                   userData.docId = doc.id;
                   userData.docData = doc.data();
+
+                  userData.iconOk = octicons.thumbsup.toSVG();
+                  userData.iconError = octicons.thumbsdown.toSVG();
 
                   //console.log('compare ', userData.docData.username, dataJSON.username); 
                   if( userData.docData.username == dataJSON.username ){
