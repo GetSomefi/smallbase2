@@ -1,18 +1,18 @@
 let http = require('http');
 let urlMod = require('url');
 let fs = require('fs');
-
 var firebase = require("firebase");
 
-// TODO: Replace the following with your app's Firebase project configuration
-var firebaseConfig = {
-  apiKey: "AIzaSyBb_swu986rUALBaKuFODg7Q-J821jCanU",
-  authDomain: "reactiveseo.firebaseapp.com",
-  databaseURL: "https://reactiveseo.firebaseio.com",
-  projectId: "reactiveseo",
-  storageBucket: "reactiveseo.appspot.com",
-  messagingSenderId: "89990520125"
-};
+/*
+module.exports = {
+  //contents of firebaseConfig file
+  //APIKEYS.js contains something like that
+}
+*/
+const APIKEYS = require('./APIKEYS.js');
+
+//console.log('apiKey', APIKEYS); 
+var firebaseConfig = APIKEYS;
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
